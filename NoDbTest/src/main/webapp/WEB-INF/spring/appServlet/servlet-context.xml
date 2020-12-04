@@ -33,8 +33,9 @@
 	
 	<task:annotation-driven executor="testExcutor" scheduler="testScheduler"/>
 	<task:scheduler id="testScheduler" pool-size="2"/>	
+	<task:executor id="testExcutor" keep-alive="5" pool-size="2" queue-capacity="1" rejection-policy="ABORT"/>	
 	<!-- <task:executor id="testExcutor" keep-alive="5" pool-size="2" queue-capacity="1" rejection-policy="DISCARD_OLDEST" /> -->	
-	<task:executor id="testExcutor" keep-alive="5" pool-size="2" queue-capacity="1" rejection-policy="CALLER_RUNS" />	
+	<!-- <task:executor id="testExcutor" keep-alive="5" pool-size="2" queue-capacity="1" rejection-policy="CALLER_RUNS" />	 -->
 	
 
 	

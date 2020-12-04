@@ -4,10 +4,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.support.ExecutorServiceAdapter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -47,14 +49,34 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
+		String str = "test<br>test2<p>testing.....</p><div>div area</div>&nbsp;&amp;";
+		
+		str = str.replaceAll("^[<>\\/]$", "");
+		
+		model.addAttribute("testTxt", str );
+		
 		return "home";
 	}
 	
 	@Async     
 	@RequestMapping("/test") 
 	public void excutorTest() {
+		ThreadPoolExecutor threadPoolExecutor =  threadPoolTaskExecutor.getThreadPoolExecutor();
+		System.out.println(threadPoolExecutor.getCorePoolSize() + " " 
+				+ threadPoolExecutor.getCorePoolSize() + " "
+				+ threadPoolExecutor.getActiveCount() + " " 
+				+ threadPoolExecutor.getQueue() + " "
+				+ threadPoolExecutor.getRejectedExecutionHandler() + " "
+				+ threadPoolExecutor.getTaskCount() + " "
+				+ threadPoolExecutor.getCompletedTaskCount()
+		);
+		
+		
+		
+		threadPoolExecutor.shutdownNow();
+		threadPoolTaskExecutor.initialize();
+		
 		System.out.println("async... " + Thread.activeCount() + " " + Thread.currentThread().getName() + " ");
-		try {
 			System.out.println(
 					"getCorePoolSize : " + threadPoolTaskExecutor.getCorePoolSize()
 					);
@@ -68,18 +90,27 @@ public class HomeController {
 					"getQueue().size() : " + threadPoolTaskExecutor.getThreadPoolExecutor().getQueue().size()
 					+ "\n" + threadPoolTaskExecutor.getThreadPoolExecutor().getQueue().toString()
 					);
-			
-			Thread.sleep(30000);
-			 
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(); 
-		}
+			for(int i =0; i < 100000000; i++) {
+				String a = ""+i;
+				if(i%10000000 == 0) {
+					//System.out.println(">>>>>" + i);
+				}
+			}
 		System.out.println("async... " + Thread.activeCount() + " " + Thread.currentThread().getName() + " end");
+		
+		ThreadPoolExecutor threadPoolExecutor2 =  threadPoolTaskExecutor.getThreadPoolExecutor();
+		System.out.println(threadPoolExecutor2.getCorePoolSize() + " " 
+				+ threadPoolExecutor2.getCorePoolSize() + " "
+				+ threadPoolExecutor2.getActiveCount() + " " 
+				+ threadPoolExecutor2.getQueue() + " "
+				+ threadPoolExecutor2.getRejectedExecutionHandler() + " "
+				+ threadPoolExecutor2.getTaskCount() + " "
+				+ threadPoolExecutor2.getCompletedTaskCount()
+		);
 	}   
 	
 	
-	@Scheduled(fixedRate = 10000)
+	//@Scheduled(fixedRate = 10000)
 	public void schdulerTest() {
 		
 		long time = System.currentTimeMillis(); cnt++; 
