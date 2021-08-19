@@ -110,16 +110,14 @@ public class HomeController {
 		    conn.setDoOutput(true);
 
 		       // 응답 내용(BODY) 구하기        
-	        try (InputStream in = conn.getInputStream();
-	                ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-	            
-	            byte[] buf = new byte[1024 * 8];
-	            int length = 0;
-	            while ((length = in.read(buf)) != -1) {
-	                out.write(buf, 0, length);
-	            }
-	            System.out.println(new String(out.toByteArray(), "UTF-8"));            
-	        }
+		    InputStream in = conn.getInputStream();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();	            
+            byte[] buf = new byte[1024 * 8];
+            int length = 0;
+            while ((length = in.read(buf)) != -1) {
+                out.write(buf, 0, length);
+            }
+            System.out.println(new String(out.toByteArray(), "UTF-8"));            
 	        conn.disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
