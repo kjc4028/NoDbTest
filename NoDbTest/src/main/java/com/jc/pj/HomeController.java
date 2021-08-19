@@ -213,7 +213,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/rest", method = RequestMethod.GET)
 	public void testRest(Model model, HttpServletRequest request, HttpServletResponse response) {
-        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
         parameters.add("kwd", "test");
 
 	//Test용 로컬 주소
